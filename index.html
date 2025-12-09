@@ -164,6 +164,7 @@
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        .tab-content:not(.active) { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         .content-header { 
@@ -1158,6 +1159,11 @@
 
         // Initialize chat when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Ensure only the active tab is visible on load
+            document.querySelectorAll('.tab-content').forEach((panel) => {
+                panel.style.display = panel.classList.contains('active') ? 'block' : 'none';
+            });
+
             const chatInput = document.getElementById('chat-input');
             const sendButton = document.getElementById('send-button');
 
