@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveIndus - Ancient Wisdom for Modern Life</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
+
+        :root {
+            --light-parchment-bg: #F0F4FF;
+            --cream-panel: #F8FAFF;
+            --rust-heading: #4A148C;
+            --golden-accent: #7C4DFF;
+            --sepia-text: #1A237E;
+            --light-gold-glow: rgba(124, 77, 255, 0.1);
+            --border-shadow: rgba(74, 20, 140, 0.1);
+            --modal-overlay: rgba(240, 244, 255, 0.9);
+        }
+
+        body {
+            background-color: var(--light-parchment-bg);
+            background-image: linear-gradient(135deg, rgba(30, 136, 229, 0.05) 0%, rgba(63, 81, 181, 0.05) 50%, rgba(142, 36, 170, 0.05) 100%), linear-gradient(rgba(240, 244, 255, 0.1), rgba(240, 244, 255, 0.1));
+            color: var(--sepia-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'EB Garamond', serif;
+        }
+
+        #artifact {
+            width: 95vw;
+            height: 90vh;
+            max-width: 1600px;
+            max-height: 900px;
+            display: flex;
+            background: linear-gradient(135deg, var(--cream-panel) 0%, rgba(248, 250, 255, 0.95) 100%);
+            border: 2px solid rgba(124, 77, 255, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(74, 20, 140, 0.15),
+                0 0 0 1px rgba(124, 77, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        #side-tabs {
+            flex-basis: 260px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, rgba(232, 234, 246, 0.9) 0%, rgba(243, 229, 245, 0.9) 100%);
+            border-right: 2px solid rgba(124, 77, 255, 0.3);
+            padding: 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 16px 0 0 16px;
+            backdrop-filter: blur(10px);
+        }
+        .logo { width: 150px; height: 150px; margin-bottom: 30px; }
+        .tab-button {
+            width: 100%;
+            padding: 16px 25px;
+            background: transparent;
+            border: none;
+            border-right: 4px solid transparent;
+            color: var(--sepia-text);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1em;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background: linear-gradient(to left, rgba(124,77,255,0.2), transparent);
+            color: var(--rust-heading);
+        }
+        .tab-button:focus-visible {
+            outline: 2px solid var(--golden-accent);
+            outline-offset: -2px;
+            background: linear-gradient(to left, rgba(124,77,255,0.15), transparent);
+        }
+        .tab-button.active {
+            font-weight: 700;
+            color: var(--rust-heading);
+            border-right: 4px solid var(--rust-heading);
+            background: linear-gradient(to left, rgba(124,77,255,0.2), transparent);
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 25px 15px;
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(142, 36, 170, 0.1));
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            border-radius: 12px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .brand-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5em;
+            color: var(--rust-heading);
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(74, 20, 140, 0.1);
+        }
+
+        .brand-header p {
+            font-family: 'EB Garamond', serif;
+            font-size: 1em;
+            color: var(--sepia-text);
+            margin: 0;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .guruchat-button {
+            background: linear-gradient(135deg, var(--golden-accent), #9C27B0) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            margin: 10px 15px !important;
+            box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .guruchat-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(124, 77, 255, 0.4) !important;
+            background: linear-gradient(135deg, #7B1FA2, #6A1B9A) !important;
+        }
+
+        .guruchat-button.active {
+            background: linear-gradient(135deg, var(--rust-heading), #4A148C) !important;
+            border-right: 4px solid var(--rust-heading) !important;
+        }
+
+
+        #content-panel {
+            flex-grow: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(248, 250, 255, 0.8), rgba(240, 244, 255, 0.9));
+            border-radius: 0 16px 16px 0;
+        }
+
+        #Guruchat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #Guruchat .content-header {
+            margin-bottom: 15px;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .content-header { 
+            text-align: center; 
+            margin-bottom: 35px; 
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.05), rgba(142, 36, 170, 0.05));
+            border-radius: 12px;
+            border: 1px solid rgba(124, 77, 255, 0.1);
+        }
+        .content-header h1 { 
+            font-family: 'Cinzel', serif; 
+            font-size: 3.2em; 
+            color: var(--rust-heading); 
+            margin: 0 0 15px 0; 
+            text-shadow: 0 2px 4px rgba(74, 20, 140, 0.1);
+            font-weight: 700;
+        }
+        .content-header p { 
+            font-style: italic; 
+            font-size: 1.3em; 
+            color: var(--sepia-text); 
+            max-width: 75%; 
+            margin: 0 auto; 
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .overview-item {
+            text-align: center;
+            border: 1px solid #C5CAE9;
+            padding: 20px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.02) 0%, rgba(142, 36, 170, 0.02) 100%);
+        }
+        .overview-item h3 { font-family: 'Cinzel', serif; color: var(--rust-heading); margin-top: 0; }
+        .overview-item p { font-size: 1em; margin-bottom: 15px; }
+        
+        .learn-more {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            color: var(--golden-accent);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--golden-accent);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        .learn-more:hover { background: var(--golden-accent); color: var(--cream-panel); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--modal-overlay);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-content {
+            background: var(--cream-panel);
+            padding: 40px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 2px solid var(--golden-accent);
+            box-shadow: 0 0 0 5px var(--rust-heading), 0 15px 30px var(--border-shadow);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none; border: none;
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--sepia-text);
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-content h2 { font-family: 'Cinzel', serif; color: var(--rust-heading); font-size: 2em; margin-top: 0; }
+        .modal-content h3 { font-family: 'Cinzel', serif; color: var(--rust-heading); font-size: 1.4em; border-bottom: 1px solid var(--light-gold-glow); padding-bottom: 5px; margin-top: 25px; }
+        .modal-content p, .modal-content li { font-size: 1.1em; line-height: 1.9; }
+
+        .petroglyph { stroke-width: 2; }
+
+        /* Chat Interface Styles */
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            height: 60vh;
+            min-height: 400px;
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #C5CAE9;
+            border-radius: 8px;
+            background: var(--cream-panel);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--golden-accent), #9C27B0);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: linear-gradient(135deg, #E8EAF6, #F3E5F5);
+            color: var(--sepia-text);
+            align-self: flex-start;
+            border: 1px solid #C5CAE9;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #C5CAE9;
+            background: var(--cream-panel);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #C5CAE9;
+            border-radius: 25px;
+            font-family: 'EB Garamond', serif;
+            font-size: 1em;
+            outline: none;
+            background: var(--cream-panel);
+            color: var(--sepia-text);
+        }
+
+        .chat-input:focus {
+            border-color: var(--golden-accent);
+            box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.1);
+        }
+
+        .send-button {
+            margin-left: 10px;
+            padding: 12px 24px;
+            background: var(--golden-accent);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            background: var(--rust-heading);
+            transform: translateY(-1px);
+        }
+
+        .send-button:disabled {
+            background: #BDBDBD;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #E8EAF6, #F3E5F5);
+            border: 1px solid #C5CAE9;
+            border-radius: 18px;
+            align-self: flex-start;
+            max-width: 70%;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--golden-accent);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        /* Shop and Tours Styles */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.05), rgba(142, 36, 170, 0.05));
+            border: 1px solid #C5CAE9;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(124, 77, 255, 0.15);
+            border-color: var(--golden-accent);
+        }
+
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .category-card h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--rust-heading);
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .category-card p {
+            color: var(--sepia-text);
+            margin: 0 0 15px 0;
+            line-height: 1.5;
+        }
+
+        .product-count, .tour-count {
+            background: var(--golden-accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .featured-products, .featured-tours {
+            margin-top: 40px;
+        }
+
+        .featured-products h2, .featured-tours h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--rust-heading);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .product-grid, .tour-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .product-card, .tour-card {
+            background: var(--cream-panel);
+            border: 1px solid #C5CAE9;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover, .tour-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(124, 77, 255, 0.1);
+            border-color: var(--golden-accent);
+        }
+
+        .product-image, .tour-image {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .product-card h4, .tour-card h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--rust-heading);
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .product-price, .tour-price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--golden-accent);
+            margin: 10px 0;
+        }
+
+        .tour-duration {
+            background: rgba(124, 77, 255, 0.1);
+            color: var(--rust-heading);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 700;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .product-description, .tour-description {
+            color: var(--sepia-text);
+            margin: 10px 0 15px 0;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        .tour-highlights {
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: rgba(124, 77, 255, 0.1);
+            color: var(--rust-heading);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            margin: 3px;
+            display: inline-block;
+        }
+
+        .add-to-cart, .book-tour {
+            background: var(--golden-accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .add-to-cart:hover, .book-tour:hover {
+            background: var(--rust-heading);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 77, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="artifact">
+        <aside id="side-tabs" role="tablist" aria-label="Sections">
+            <svg class="logo petroglyph" viewBox="0 0 150 150" aria-hidden="true">
+                <!-- Distant sailboat over sea -->
+                <defs>
+                    <linearGradient id="seaGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#3F51B5"/>
+                        <stop offset="100%" stop-color="#7C4DFF"/>
+                    </linearGradient>
+                    <linearGradient id="sailGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                        <stop offset="100%" stop-color="#E6E6FA" stop-opacity="0.9"/>
+                    </linearGradient>
+                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#E3F2FD"/>
+                        <stop offset="100%" stop-color="#BBDEFB"/>
+                    </linearGradient>
+                </defs>
+                <!-- Sky background -->
+                <rect x="0" y="0" width="150" height="80" fill="url(#skyGrad)" opacity="0.8"/>
+                <!-- Horizon and sea -->
+                <rect x="0" y="80" width="150" height="35" fill="url(#seaGrad)" opacity="0.9"/>
+                <path d="M15 95 C 30 100, 45 90, 60 95 S 90 100, 120 93 S 140 98, 150 95" stroke="rgba(255,255,255,0.7)" fill="none" stroke-width="2"/>
+                <!-- Boat hull (larger, more detailed) -->
+                <path d="M70 75 L80 75 L75 85 Z" fill="#5C6BC0" stroke="#3949AB" stroke-width="1.5"/>
+                <path d="M72 80 L78 80 L75 85 Z" fill="#3949AB"/>
+                <!-- Mast -->
+                <line x1="75" y1="60" x2="75" y2="75" stroke="#3949AB" stroke-width="2"/>
+                <!-- Sails (larger) -->
+                <path d="M75 60 L75 75 L65 70 Z" fill="url(#sailGrad)" stroke="#B39DDB" stroke-width="1.5"/>
+                <path d="M75 60 L85 70 L75 75 Z" fill="url(#sailGrad)" stroke="#B39DDB" stroke-width="1.5"/>
+                <!-- Sail details -->
+                <line x1="75" y1="60" x2="70" y2="68" stroke="#9C27B0" stroke-width="1" opacity="0.6"/>
+                <line x1="75" y1="60" x2="80" y2="68" stroke="#9C27B0" stroke-width="1" opacity="0.6"/>
+                <!-- Distant sun glow -->
+                <circle cx="110" cy="50" r="12" fill="#D1C4E9" opacity="0.6"/>
+                <circle cx="110" cy="50" r="8" fill="#FFF9C4" opacity="0.8"/>
+                <!-- Additional waves -->
+                <path d="M5 100 C 20 105, 35 95, 50 100 S 80 105, 100 98" stroke="rgba(255,255,255,0.4)" fill="none" stroke-width="1.5"/>
+            </svg>
+            
+            <div class="brand-header">
+                <h2>LiveIndus</h2>
+                <p>Ancient Wisdom for Modern Life</p>
+            </div>
+            
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="Premise" id="tab-Premise" onclick="openTab(event, 'Premise')">The Premise</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Method" id="tab-Method" onclick="openTab(event, 'Method')">The Method</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Disciplines" id="tab-Disciplines" onclick="openTab(event, 'Disciplines')">The Disciplines</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Tides" id="tab-Tides" onclick="openTab(event, 'Tides')">The Tides</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Journey" id="tab-Journey" onclick="openTab(event, 'Journey')">The Journey</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Shop" id="tab-Shop" onclick="openTab(event, 'Shop')">Sacred Shop</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="Tours" id="tab-Tours" onclick="openTab(event, 'Tours')">Spiritual Tours</button>
+            <button class="tab-button guruchat-button" role="tab" aria-selected="false" aria-controls="Guruchat" id="tab-Guruchat" onclick="openTab(event, 'Guruchat')">🧘‍♂️ Guruchat</button>
+        </aside>
+
+        <main id="content-panel">
+            <div id="Premise" class="tab-content active" role="tabpanel" aria-labelledby="tab-Premise">
+                <div class="content-header">
+                    <h1>The Divided Life</h1>
+                    <p>We are pulled between who we are and what we do, living a life of fragmentation. Coherence is the state where your inner world and outer actions resonate as one.</p>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <h3>The Modern Problem</h3>
+                        <p>We manage life in isolated silos—work, health, mind, spirit—leading to internal conflict and exhaustion.</p>
+                        <span class="learn-more" onclick="openModal('modal-premise-problem')">Read More [ ⊕ ]</span>
+                    </div>
+                    <div class="overview-item">
+                        <h3>The Indus Solution</h3>
+                        <p>LiveIndus offers a unified framework to integrate these silos, creating a life of effortless flow and profound integrity.</p>
+                        <span class="learn-more" onclick="openModal('modal-premise-solution')">Read More [ ⊕ ]</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Method" class="tab-content" role="tabpanel" aria-labelledby="tab-Method">
+                <div class="content-header">
+                    <h1>The Core Architecture</h1>
+                    <p>Your inner world is composed of three primary elements: your unwavering center (The Axis), the field of your experience (The Arena), and the vital points where they meet (The Resonators).</p>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <h3>The Axis: Your Center</h3>
+                        <p>The silent, stable core of you. The unwavering observer that witnesses your life without being defined by it.</p>
+                        <span class="learn-more" onclick="openModal('modal-method-axis')">Explore The Axis [ ⊕ ]</span>
+                    </div>
+                    <div class="overview-item">
+                        <h3>The Arena: Your Experience</h3>
+                        <p>The ever-changing world of your lived reality, composed of interconnected layers we call The Currents.</p>
+                        <span class="learn-more" onclick="openModal('modal-method-arena')">Explore The Arena [ ⊕ ]</span>
+                    </div>
+                    <div class="overview-item">
+                        <h3>The Axis Resonators</h3>
+                        <p>Seven vital centers along your Axis that process and translate the data of your experience into coherent wisdom.</p>
+                        <span class="learn-more" onclick="openModal('modal-method-resonators')">Explore The Resonators [ ⊕ ]</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="Disciplines" class="tab-content" role="tabpanel" aria-labelledby="tab-Disciplines">
+                 <div class="content-header"><h1>The Four Disciplines</h1><p>Mastery is not an idea, but a practice. These four disciplines build the skill of integrated living, bridging the Axis and the Arena.</p></div>
+                <div class="overview-grid">
+                     <div class="overview-item"><h3>Resonance</h3><p>Aligning actions with core values.</p><span class="learn-more" onclick="openModal('modal-discipline-resonance')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Embodiment</h3><p>Grounding awareness in the body.</p><span class="learn-more" onclick="openModal('modal-discipline-embodiment')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Focus</h3><p>Mastering the direction of attention.</p><span class="learn-more" onclick="openModal('modal-discipline-focus')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Synthesis</h3><p>Integrating all aspects into a whole.</p><span class="learn-more" onclick="openModal('modal-discipline-synthesis')">Details [ ⊕ ]</span></div>
+                </div>
+            </div>
+            
+            <div id="Tides" class="tab-content" role="tabpanel" aria-labelledby="tab-Tides">
+                <div class="content-header"><h1>The Three Tides</h1><p>Navigate your energy by understanding its natural state. A master navigator uses the tides; they do not fight them.</p></div>
+                 <div class="overview-grid">
+                     <div class="overview-item"><h3>The Lucid Tide</h3><p>Clarity, Balance, Reflection</p><span class="learn-more" onclick="openModal('modal-tide-lucid')">Read More [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>The Dynamic Tide</h3><p>Action, Momentum, Passion</p><span class="learn-more" onclick="openModal('modal-tide-dynamic')">Read More [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>The Grounded Tide</h3><p>Stillness, Stability, Rest</p><span class="learn-more" onclick="openModal('modal-tide-grounded')">Read More [ ⊕ ]</span></div>
+                </div>
+            </div>
+            
+            <div id="Journey" class="tab-content" role="tabpanel" aria-labelledby="tab-Journey">
+                <div class="content-header"><h1>From Theory to Transformation</h1><p>Coherence is not a destination, but a state you learn to cultivate daily. It is the most rewarding skill you will ever develop.</p></div>
+                <div class="overview-item" style="max-width: 500px; margin: 20px auto;">
+                    <h3>The Coherence Code</h3>
+                    <p>Our 30-Day Immersion provides the tools and guided practices to master the LiveIndus framework and build a life of profound integrity and flow.</p>
+                    <a href="#" class="learn-more" style="background:var(--rust-heading); color:var(--cream-panel); border-color:var(--rust-heading);">Enroll in the Immersion</a>
+                </div>
+            </div>
+
+            <div id="Guruchat" class="tab-content" role="tabpanel" aria-labelledby="tab-Guruchat">
+                <div class="content-header">
+                    <h1>Guruchat</h1>
+                    <p>Share what's troubling your heart, and I will guide you through ancient wisdom. Through gentle probing, we'll uncover your core issue and find guidance.</p>
+                </div>
+                <div id="chat-container" class="chat-container">
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Share what's troubling your heart..." class="chat-input">
+                        <button id="send-button" class="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Shop" class="tab-content" role="tabpanel" aria-labelledby="tab-Shop">
+                <div class="content-header">
+                    <h1>Sacred Shop</h1>
+                    <p>Discover authentic spiritual products and wellness items from trusted vendors. Each item is carefully curated to support your spiritual journey.</p>
+                </div>
+                <div class="shop-categories">
+                    <div class="category-grid">
+                        <div class="category-card">
+                            <div class="category-icon">🧘‍♀️</div>
+                            <h3>Yoga & Meditation</h3>
+                            <p>Premium yoga mats, meditation cushions, and mindfulness tools</p>
+                            <div class="product-count">12 products</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">👕</div>
+                            <h3>Organic Clothing</h3>
+                            <p>Eco-friendly, sustainable clothing for conscious living</p>
+                            <div class="product-count">8 products</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">🕯️</div>
+                            <h3>Sacred Items</h3>
+                            <p>Incense, crystals, mala beads, and spiritual artifacts</p>
+                            <div class="product-count">15 products</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">📚</div>
+                            <h3>Wisdom Books</h3>
+                            <p>Ancient texts, spiritual guides, and transformative literature</p>
+                            <div class="product-count">20 products</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-products">
+                    <h2>Featured Products</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">🛏️</div>
+                            <h4>Organic Cotton Yoga Mat</h4>
+                            <p class="product-price">$89.99</p>
+                            <p class="product-description">Eco-friendly, non-slip yoga mat made from natural materials</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🔮</div>
+                            <h4>Rose Quartz Mala Beads</h4>
+                            <p class="product-price">$45.00</p>
+                            <p class="product-description">108-bead meditation necklace for heart chakra healing</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">📖</div>
+                            <h4>Bhagavad Gita (Sanskrit)</h4>
+                            <p class="product-price">$25.99</p>
+                            <p class="product-description">Original Sanskrit text with English translation and commentary</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Tours" class="tab-content" role="tabpanel" aria-labelledby="tab-Tours">
+                <div class="content-header">
+                    <h1>Spiritual Tours</h1>
+                    <p>Embark on transformative journeys to sacred places around the world. Connect with ancient wisdom through guided spiritual experiences.</p>
+                </div>
+                <div class="tours-categories">
+                    <div class="category-grid">
+                        <div class="category-card">
+                            <div class="category-icon">🏔️</div>
+                            <h3>Himalayan Retreats</h3>
+                            <p>Meditation retreats in the sacred mountains of India and Nepal</p>
+                            <div class="tour-count">5 tours</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">🏛️</div>
+                            <h3>Ancient Temples</h3>
+                            <p>Pilgrimage tours to historic temples and spiritual sites</p>
+                            <div class="tour-count">8 tours</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">🌊</div>
+                            <h3>Sacred Rivers</h3>
+                            <p>Ganges, Yamuna, and other holy river experiences</p>
+                            <div class="tour-count">6 tours</div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-icon">🌿</div>
+                            <h3>Wellness Retreats</h3>
+                            <p>Ayurvedic treatments and holistic healing experiences</p>
+                            <div class="tour-count">4 tours</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-tours">
+                    <h2>Featured Tours</h2>
+                    <div class="tour-grid">
+                        <div class="tour-card">
+                            <div class="tour-image">🏔️</div>
+                            <h4>Rishikesh Yoga Retreat</h4>
+                            <p class="tour-duration">7 days</p>
+                            <p class="tour-price">$1,299</p>
+                            <p class="tour-description">Complete yoga and meditation experience in the yoga capital of the world</p>
+                            <div class="tour-highlights">
+                                <span class="highlight">Daily yoga sessions</span>
+                                <span class="highlight">Ganges ceremony</span>
+                                <span class="highlight">Ayurvedic meals</span>
+                            </div>
+                            <button class="book-tour">Book Now</button>
+                        </div>
+                        <div class="tour-card">
+                            <div class="tour-image">🏛️</div>
+                            <h4>Varanasi Temple Tour</h4>
+                            <p class="tour-duration">5 days</p>
+                            <p class="tour-price">$899</p>
+                            <p class="tour-description">Spiritual journey through the oldest living city in the world</p>
+                            <div class="tour-highlights">
+                                <span class="highlight">Ganga Aarti ceremony</span>
+                                <span class="highlight">Temple visits</span>
+                                <span class="highlight">Spiritual guidance</span>
+                            </div>
+                            <button class="book-tour">Book Now</button>
+                        </div>
+                        <div class="tour-card">
+                            <div class="tour-image">🌿</div>
+                            <h4>Kerala Ayurvedic Retreat</h4>
+                            <p class="tour-duration">10 days</p>
+                            <p class="tour-price">$1,599</p>
+                            <p class="tour-description">Complete wellness experience with traditional Ayurvedic treatments</p>
+                            <div class="tour-highlights">
+                                <span class="highlight">Panchakarma therapy</span>
+                                <span class="highlight">Organic meals</span>
+                                <span class="highlight">Nature walks</span>
+                            </div>
+                            <button class="book-tour">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="modal-premise-problem" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Fragmentation of Modern Life</h2>
+            <p>You have a career, relationships, health goals, and personal aspirations. From the outside, the pieces are all there. Yet, internally, it feels like a constant, draining battle to keep them from flying apart. We run on different, often conflicting, internal programs for each area of our life.</p>
+            <p>Our 'work self' might be disciplined and ambitious, while our 'home self' is exhausted and passive. Our 'health self' sets goals our 'emotional self' sabotages. This creates immense internal friction—a constant hum of stress, cognitive dissonance, and wasted energy. We believe this fragmentation is the root cause of the burnout and lack of fulfillment so common today. It's not about lacking willpower; it's about lacking a unified internal architecture that allows these different parts of ourselves to communicate and align.</p>
+            <p>The result is a life of "juggling"—a frantic, surface-level activity that requires immense effort but yields little deep satisfaction. We are so busy managing the pieces that we lose connection to the whole.</p>
+        </div>
+    </div>
+    <div id="modal-premise-solution" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Path to Coherence</h2>
+            <p>Coherence is the state where your internal world and external actions are in perfect resonance. It is a life lived with profound integrity, energy, and flow. It's when your thoughts, emotions, physical energy, and deepest values are all aligned and moving in the same direction, guided by a single, clear intention.</p>
+            <p>Imagine the difference between a rowing team where each member paddles at their own pace and rhythm, versus a team that moves in perfect, synchronized harmony. The first is chaotic, inefficient, and exhausting. The second is powerful, graceful, and effective. LiveIndus provides the framework to get all your inner "rowers" paddling in unison.</p>
+            <p>This is not about adding more tasks or life hacks. It is an upgrade to your internal operating system. By understanding the core components of your experience—The Axis, The Arena, and The Resonators—and practicing the Disciplines that integrate them, you move from a life of fragmentation to one of powerful, unified Coherence. You stop juggling and start living an integrated, meaningful life.</p>
+        </div>
+    </div>
+
+    <div id="modal-method-axis" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Axis: Your Unshakable Center</h2>
+            <p>The Axis is the most profound and powerful aspect of you, yet it is also the most subtle. It is the silent, stable core of pure awareness. It is not your thoughts, emotions, or body—it is the part of you that is aware *of* your thoughts, emotions, and body. It is the constant in the equation of your life.</p>
+            <h3>Metaphors for The Axis:</h3>
+            <ul>
+                <li><strong>The Sky:</strong> It remains vast and unchanged whether there are storm clouds (difficult emotions), sunshine (joy), or a clear night (peace). The weather is your ever-changing experience; the sky is your unchanging Axis.</li>
+                <li><strong>The Deep Ocean:</strong> The surface of the ocean can be turbulent with waves, but the depths remain calm and still. Your daily experiences are the waves; your Axis is the silent depth.</li>
+                <li><strong>The Mountain:</strong> A mountain stands firm and unmoving through all seasons and weather. It is a symbol of stability and presence.</li>
+            </ul>
+            <p>In a world of constant change and stimulation, our attention is almost always directed outward, lost in the "weather" of our lives. We identify so strongly with our thoughts and feelings that we forget the vast, silent awareness that holds them. The first and most crucial step in the LiveIndus method is learning to identify and connect with this inner stability. A strong connection to your Axis provides resilience, clarity, and an internal anchor that keeps you steady no matter how turbulent the Arena becomes. It is the source of true confidence and inner peace.</p>
+        </div>
+    </div>
+    <div id="modal-method-arena" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Arena & Its Currents</h2>
+            <p>The Arena is the dynamic, ever-changing world of your lived reality. It's everything that happens, everything you can perceive. The key is not to control the Arena, but to navigate it with skill and wisdom. To do this, we must first understand its structure. The Arena is composed of four interconnected layers of experience we call <strong>The Currents:</strong></p>
+            <ul>
+                <li><strong>The Somatic Current:</strong> The language of the physical body. It includes all physical sensations, posture, tension, relaxation, pain, and pleasure. It is the most tangible layer of your experience.</li>
+                <li><strong>The Kinetic Current:</strong> The flow of vital energy. This is your life force, experienced as breath, stamina, fatigue, and vibrancy. It animates the Somatic Current.</li>
+                <li><strong>The Emotional Current:</strong> The texture of feelings. This includes the entire spectrum of human emotion—joy, anger, peace, anxiety—and their complex interplay. This current powerfully influences all others.</li>
+                <li><strong>The Cognitive Current:</strong> The stream of the mind. This involves thoughts, beliefs, memories, stories, and the mental models you use to interpret reality. It is the narrative layer of your experience.</li>
+            </ul>
+            <h3>The Interplay of Currents: A Practical Example</h3>
+            <p>Imagine you receive a critical email at work. The process unfolds instantly across all currents:
+            1.  **Cognitive:** You read the words and interpret them as a threat ("I made a mistake," "My boss is angry").
+            2.  **Emotional:** This thought triggers an immediate feeling of anxiety, fear, or anger.
+            3.  **Somatic:** The emotion manifests physically as a knot in your stomach, tightness in your chest, or tense shoulders.
+            4.  **Kinetic:** Your breathing becomes shallow and rapid, and you feel a rush of adrenaline followed by a drain of energy.
+            </p>
+            <p>The LiveIndus method teaches you to observe this entire chain reaction from the stability of your Axis, allowing you to respond consciously rather than reacting automatically.</p>
+        </div>
+    </div>
+    <div id="modal-method-resonators" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Seven Axis Resonators</h2>
+            <p>Along your central Axis lie seven vital nexus points we call the Axis Resonators. These are not physical objects, but powerful vortexes of energy and information where the four Currents converge and are processed. Each Resonator governs a specific domain of your human experience, from basic survival to your highest potential.</p>
+            <p>When these Resonators are balanced and coherent, information flows freely along your Axis, and you experience health, clarity, and well-being in that domain of life. When a Resonator is imbalanced or blocked, it creates incoherence, leading to the specific challenges associated with that center. Understanding and tuning these Resonators is a key practice for achieving holistic Coherence.</p>
+            <h3>Explore each Resonator to learn more:</h3>
+            <p style="text-align:center; margin-top:20px;">
+                <i>(On the live site, each Resonator below would be a clickable element opening its own detailed modal.)</i><br/><br/>
+                1. The Grounding Resonator (Safety & Stability)<br/>
+                2. The Flow Resonator (Emotion & Creativity)<br/>
+                3. The Power Resonator (Will & Identity)<br/>
+                4. The Harmony Resonator (Love & Connection)<br/>
+                5. The Expression Resonator (Truth & Communication)<br/>
+                6. The Insight Resonator (Intuition & Wisdom)<br/>
+                7. The Coherence Resonator (Integration & Oneness)
+            </p>
+        </div>
+    </div>
+
+    <div id="modal-discipline-resonance" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Resonance</h2><p>Resonance is the practice of aligning the actions you take in your external world (The Arena) with the deepest truths and values of your inner world (The Axis). When you are in a state of resonance, there is no gap between what you believe and how you live. Your choices feel natural, clear, and energized because they are an authentic expression of who you are.</p><p>Living out of resonance creates a constant, low-grade internal static. It's the feeling of being a fraud, the exhaustion of maintaining a persona, or the vague dissatisfaction of pursuing goals that aren't truly yours. This discipline involves deep self-inquiry to clarify your core values and the courage to make choices—in your career, relationships, and daily habits—that honor them. It is the foundation of a life of integrity.</p></div></div>
+    <div id="modal-discipline-embodiment" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Embodiment</h2><p>Embodiment is the practice of fully inhabiting your physical body, treating it not as a mere vehicle for your brain, but as an intelligent, feeling system in itself. It means grounding your awareness in the rich landscape of the Somatic and Kinetic Currents—your posture, breath, and the subtle flows of energy within you. In a culture that encourages us to live "in our heads," this discipline is a radical act of reconnection.</p><p>Through specific practices of mindful movement and conscious breathwork, you learn to listen to your body's wisdom. You develop the ability to regulate your own nervous system, releasing stored tension and calming anxiety at its physiological root. A fully embodied person is grounded, present, and moves through the world with ease and confidence, their Axis firmly anchored in their physical form.</p></div></div>
+    <div id="modal-discipline-focus" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Focus</h2><p>In the modern world, your attention is your most valuable and most plundered resource. The Discipline of Focus is the practice of reclaiming this resource. It is the ability to consciously direct your awareness where you choose, for as long as you choose, without being constantly pulled away by the chaotic streams of the Emotional and Cognitive Currents or external distractions.</p><p>This is more than just concentration on a task. It's the ability to hold your attention steady on a single feeling without being overwhelmed, to observe a thought without being carried away by it, and to withdraw your senses from external noise to connect with your inner world. Mastering focus transforms a scattered mind into a laser-like tool of perception and creation, allowing you to enter deep states of flow and presence at will.</p></div></div>
+    <div id="modal-discipline-synthesis" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Synthesis</h2><p>Synthesis is the culmination of the other three disciplines. It is the advanced practice of bringing all the elements of your being into a harmonious, integrated whole. When Resonance, Embodiment, and Focus are cultivated, you begin to experience moments where the distinction between your stable Axis and your dynamic Arena softens. You are both the mountain and the weather, the deep ocean and the wave.</p><p>This is the state of "flow" or "peak experience," but it is not an accident. It is a trainable state of being where your actions become effortless, your perception is heightened, and you feel a profound connection to life. In Synthesis, you are no longer a fragmented self juggling pieces, but a single, coherent being moving with purpose, grace, and wisdom.</p></div></div>
+    <div id="modal-tide-lucid" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Lucid Tide</h2><p>The Lucid Tide is a state of calm, clear, and harmonious energy. It is receptive, bright, and balanced, like a still, clear lake reflecting the sky perfectly. When this tide is dominant, your mind is sharp but relaxed, and your emotions are stable. This is the ideal state for learning, creative ideation, strategic thinking, deep connection with others, and any activity requiring insight and subtle perception. Cultivating this state allows you to see things as they are, without the distortion of agitation or lethargy. It's the energetic signature of wisdom and clarity.</p></div></div>
+    <div id="modal-tide-dynamic" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Dynamic Tide</h2><p>The Dynamic Tide is a state of active, energetic, and forward-moving energy. It is passionate, ambitious, and driven, like a powerful river carving its path through the landscape. When this tide is strong, you feel motivated, confident, and ready to act. It is the engine of accomplishment, perfect for executing tasks, overcoming challenges, physical exertion, and driving change in the world. Learning to harness this tide without letting it become chaotic, aggressive, or stressful is the key to effective action without burnout. It is the energetic signature of power and will.</p></div></div>
+    <div id="modal-tide-grounded" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Grounded Tide</h2><p>The Grounded Tide is a state of still, heavy, and stable energy. It is about rest, consolidation, and structure, like the bedrock deep within the earth. While often mistaken for laziness or inertia in our hyper-productive culture, the Grounded Tide is essential for recovery, integrating lessons, and building stable foundations for future growth. Deep rest, reflection, and strategic planning are best done when this tide is present. Honoring it by not forcing action prevents burnout and allows for true, sustainable progress. It is the energetic signature of stability and restoration.</p></div></div>
+
+
+    <script>
+        function openTab(evt, tabName) {
+            let i, tabcontent, tabbuttons;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+                tabbuttons[i].setAttribute('aria-selected', 'false');
+                tabbuttons[i].setAttribute('tabindex', '-1');
+            }
+            const panel = document.getElementById(tabName);
+            panel.style.display = "block";
+            evt.currentTarget.className += " active";
+            evt.currentTarget.setAttribute('aria-selected', 'true');
+            evt.currentTarget.setAttribute('tabindex', '0');
+            panel.focus({ preventScroll: true });
+        }
+
+        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+
+        function closeAllModals(event) {
+            if (event && event.target.classList.contains('modal-overlay')) {
+                 event.target.classList.remove('active');
+            } else if (!event) {
+                let modals = document.getElementsByClassName('modal-overlay');
+                for (let i = 0; i < modals.length; i++) { modals[i].classList.remove('active'); }
+            }
+        }
+        
+        // Keyboard navigation for tabs
+        (function enableTabKeyboardNav(){
+            const tabs = Array.from(document.querySelectorAll('#side-tabs .tab-button'));
+            const keys = ['ArrowUp','ArrowDown','Home','End'];
+            tabs.forEach((tab, idx)=>{
+                tab.addEventListener('keydown', (e)=>{
+                    if (!keys.includes(e.key)) return;
+                    e.preventDefault();
+                    let nextIndex = idx;
+                    if (e.key === 'ArrowDown') nextIndex = (idx + 1) % tabs.length;
+                    if (e.key === 'ArrowUp') nextIndex = (idx - 1 + tabs.length) % tabs.length;
+                    if (e.key === 'Home') nextIndex = 0;
+                    if (e.key === 'End') nextIndex = tabs.length - 1;
+                    tabs[nextIndex].focus();
+                    tabs[nextIndex].click();
+                });
+            });
+        })();
+
+        document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeAllModals(); } });
+
+        // Chat functionality
+        let chatHistory = [];
+        let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+        function addMessage(content, isUser) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+            messageDiv.textContent = content;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Disable input and button
+            input.disabled = true;
+            sendButton.disabled = true;
+            sendButton.textContent = 'Sending...';
+
+            // Add user message
+            addMessage(message, true);
+            chatHistory.push({ role: 'user', content: message });
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Call Netlify function (smart conversation flow)
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: chatHistory,
+                        sessionId: sessionId
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    throw new Error(`API Error: ${errorData.message || 'Network response was not ok'}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Add assistant response
+                if (data.response) {
+                    addMessage(data.response, false);
+                    chatHistory.push({ role: 'assistant', content: data.response });
+                } else {
+                    throw new Error('No response from API');
+                }
+
+            } catch (error) {
+                console.error('Error details:', error);
+                hideTypingIndicator();
+                
+                let errorMessage = 'Sorry, I encountered an error. Please try again.';
+                if (error.message.includes('API Error')) {
+                    errorMessage = error.message.replace('API Error: ', '');
+                }
+                
+                addMessage(errorMessage, false);
+            } finally {
+                // Re-enable input and button
+                input.disabled = false;
+                sendButton.disabled = false;
+                sendButton.textContent = 'Send';
+                input.focus();
+            }
+        }
+
+        // Initialize chat when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+
+            if (chatInput && sendButton) {
+                sendButton.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+
+                // Add welcome message
+                addMessage('Hi there. I\'m here to help guide you through whatever you\'re facing. What\'s on your mind today?', false);
+            }
+        });
+    </script>
+
+</body>
+</html>

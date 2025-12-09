@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveIndus - The Illuminated Artifact</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
+
+        :root {
+            --light-parchment-bg: #FDF9F3;
+            --cream-panel: #FFFCF7; /* Slightly lighter for inner panels */
+            --rust-heading: #A83A0D;
+            --golden-accent: #C79533;
+            --sepia-text: #5A4E40;
+            --light-gold-glow: rgba(199, 149, 51, 0.2);
+            --border-shadow: rgba(0,0,0,0.1); /* Lighter shadow for bright theme */
+            --modal-overlay: rgba(253, 249, 243, 0.9); /* Opaque parchment overlay */
+        }
+
+        /* --- IMMERSIVE LIGHT BACKGROUND & LAYOUT --- */
+        body {
+            background-color: var(--light-parchment-bg);
+            /* High-quality seamless parchment texture embedded as Base64 */
+            background-image: linear-gradient(rgba(253, 249, 243, 0.1), rgba(253, 249, 243, 0.1)), url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAcABwMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrOztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVietEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrOztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6V/4KMf8ABZnxz8J/2hNa/Zt/ZE8N+F7p/BUkdl4v8d+K4JtQil18Rq95p2j6TDNDbmHT97WUt5ePOJLmGeOKGJYxJL85/wDD579v3/oE/s3/APhAeJ//AJd0f8E6v+Uov7bf/ZXfEH/qYa5X23QB//Z');
+            color: var(--sepia-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'EB Garamond', serif;
+        }
+
+        /* --- THE MAIN ARTIFACT CONTAINER --- */
+        #artifact {
+            width: 95vw;
+            height: 90vh;
+            max-width: 1600px;
+            max-height: 900px;
+            display: flex;
+            background: var(--cream-panel);
+            /* Multi-layered border for a branded artifact feel */
+            border: 2px solid var(--golden-accent);
+            box-shadow: 0 0 0 5px var(--rust-heading), 0 0 40px 10px var(--border-shadow);
+            border-radius: 8px;
+        }
+
+        /* --- SIDE TABS NAVIGATION --- */
+        #side-tabs {
+            flex-basis: 240px;
+            flex-shrink: 0;
+            background-color: #EAE0D5; /* A light, stony color for the side panel */
+            border-right: 2px solid var(--golden-accent);
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo { width: 120px; height: 120px; margin-bottom: 30px; }
+        .tab-button {
+            width: 100%;
+            padding: 16px 25px;
+            background: transparent;
+            border: none;
+            border-right: 4px solid transparent;
+            color: var(--sepia-text);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1em;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover { background: var(--light-gold-glow); }
+        .tab-button.active {
+            font-weight: 700;
+            color: var(--rust-heading);
+            border-right: 4px solid var(--rust-heading);
+            background: linear-gradient(to left, var(--light-gold-glow), transparent);
+        }
+
+        /* --- MAIN CONTENT PANEL --- */
+        #content-panel {
+            flex-grow: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* --- CONTENT STYLING --- */
+        .content-header { text-align: center; margin-bottom: 25px; }
+        .content-header h1 { font-family: 'Cinzel', serif; font-size: 3em; color: var(--rust-heading); margin: 0; }
+        .content-header p { font-style: italic; font-size: 1.2em; color: var(--sepia-text); max-width: 70%; margin: 10px auto 0 auto; }
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .overview-item {
+            text-align: center;
+            border: 1px solid #EAE0D5;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .overview-item h3 { font-family: 'Cinzel', serif; color: var(--rust-heading); margin-top: 0; }
+        .overview-item p { font-size: 1em; margin-bottom: 15px; }
+        
+        /* --- INTERACTIVE "LEARN MORE" TRIGGER --- */
+        .learn-more {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            color: var(--golden-accent);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--golden-accent);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        .learn-more:hover { background: var(--golden-accent); color: var(--cream-panel); }
+
+        /* --- MODAL (POP-UP) STYLING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--modal-overlay);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-content {
+            background: var(--cream-panel);
+            padding: 40px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 2px solid var(--golden-accent);
+            box-shadow: 0 0 0 5px var(--rust-heading), 0 15px 30px var(--border-shadow);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none; border: none;
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--sepia-text);
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-content h2 { font-family: 'Cinzel', serif; color: var(--rust-heading); font-size: 2em; margin-top: 0; }
+        .modal-content p, .modal-content li { font-size: 1.1em; line-height: 1.9; }
+
+        /* --- VISUALS --- */
+        .petroglyph { stroke-width: 2; }
+
+    </style>
+</head>
+<body>
+
+    <div id="artifact">
+        <aside id="side-tabs">
+            <svg class="logo petroglyph" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="48" fill="var(--rust-heading)" stroke="var(--golden-accent)" stroke-width="2"/>
+                <line x1="50" y1="15" x2="50" y2="85" stroke="var(--cream-panel)" stroke-width="3"/>
+                <path d="M25 30 C 40 50, 60 50, 75 70" stroke="var(--cream-panel)" fill="none" opacity="0.8"/>
+                <path d="M75 30 C 60 50, 40 50, 25 70" stroke="var(--cream-panel)" fill="none" opacity="0.8"/>
+            </svg>
+            
+            <button class="tab-button active" onclick="openTab(event, 'Premise')">The Premise</button>
+            <button class="tab-button" onclick="openTab(event, 'Method')">The Method</button>
+            <button class="tab-button" onclick="openTab(event, 'Disciplines')">The Disciplines</button>
+            <button class="tab-button" onclick="openTab(event, 'Tides')">The Tides</button>
+            <button class="tab-button" onclick="openTab(event, 'Journey')">The Journey</button>
+        </aside>
+
+        <main id="content-panel">
+            <div id="Premise" class="tab-content active">
+                <div class="content-header">
+                    <h1>The Divided Life</h1>
+                    <p>We are pulled between who we are and what we do, living a life of fragmentation. Coherence is the state where your inner world and outer actions resonate as one.</p>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <h3>The Modern Problem</h3>
+                        <p>We manage life in isolated silos—work, health, mind, spirit—leading to internal conflict and exhaustion. This is fragmentation.</p>
+                        <span class="learn-more" onclick="openModal('modal-premise-problem')">Read More [ ⊕ ]</span>
+                    </div>
+                    <div class="overview-item">
+                        <h3>The Indus Solution</h3>
+                        <p>LiveIndus offers a unified framework to integrate these silos, creating a life of effortless flow and profound integrity. This is Coherence.</p>
+                        <span class="learn-more" onclick="openModal('modal-premise-solution')">Read More [ ⊕ ]</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Method" class="tab-content">
+                <div class="content-header">
+                    <h1>The Axis & The Arena</h1>
+                    <p>Your life consists of two elements: your unwavering center of awareness (The Axis) and the dynamic field of your experience (The Arena).</p>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <h3>The Axis: Your Center</h3>
+                        <p>The silent, stable core of you. The unwavering observer that witnesses your life without being defined by it.</p>
+                        <span class="learn-more" onclick="openModal('modal-method-axis')">Explore The Axis [ ⊕ ]</span>
+                    </div>
+                    <div class="overview-item">
+                        <h3>The Arena: Your Experience</h3>
+                        <p>The ever-changing world of your lived reality, composed of interconnected layers we call The Currents.</p>
+                        <span class="learn-more" onclick="openModal('modal-method-arena')">Explore The Arena [ ⊕ ]</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Disciplines" class="tab-content">
+                 <div class="content-header">
+                    <h1>The Four Disciplines</h1>
+                    <p>Mastery is not an idea, but a practice. These four disciplines build the skill of integrated living, bridging the Axis and the Arena.</p>
+                </div>
+                <div class="overview-grid">
+                     <div class="overview-item"><h3>Resonance</h3><p>Aligning actions with core values.</p><span class="learn-more" onclick="openModal('modal-discipline-resonance')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Embodiment</h3><p>Grounding awareness in the body.</p><span class="learn-more" onclick="openModal('modal-discipline-embodiment')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Focus</h3><p>Mastering the direction of attention.</p><span class="learn-more" onclick="openModal('modal-discipline-focus')">Details [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>Synthesis</h3><p>Integrating all aspects into a whole.</p><span class="learn-more" onclick="openModal('modal-discipline-synthesis')">Details [ ⊕ ]</span></div>
+                </div>
+            </div>
+            
+            <div id="Tides" class="tab-content">
+                <div class="content-header">
+                    <h1>The Three Tides</h1>
+                    <p>Navigate your energy by understanding its natural state. A master navigator uses the tides; they do not fight them.</p>
+                </div>
+                 <div class="overview-grid">
+                     <div class="overview-item"><h3>The Lucid Tide</h3><p>Clarity, Balance, Reflection</p><span class="learn-more" onclick="openModal('modal-tide-lucid')">Read More [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>The Dynamic Tide</h3><p>Action, Momentum, Passion</p><span class="learn-more" onclick="openModal('modal-tide-dynamic')">Read More [ ⊕ ]</span></div>
+                     <div class="overview-item"><h3>The Grounded Tide</h3><p>Stillness, Stability, Rest</p><span class="learn-more" onclick="openModal('modal-tide-grounded')">Read More [ ⊕ ]</span></div>
+                </div>
+            </div>
+            
+            <div id="Journey" class="tab-content">
+                <div class="content-header">
+                    <h1>From Theory to Transformation</h1>
+                    <p>Coherence is not a destination, but a state you learn to cultivate daily. It is the most rewarding skill you will ever develop.</p>
+                </div>
+                <div class="overview-item" style="max-width: 500px; margin: 20px auto;">
+                    <h3>The Coherence Code</h3>
+                    <p>Our 30-Day Immersion provides the tools and guided practices to master the LiveIndus framework and build a life of profound integrity and flow.</p>
+                    <a href="#" class="learn-more" style="background:var(--rust-heading); color:var(--cream-panel); border-color:var(--rust-heading);">Enroll in the Immersion</a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="modal-premise-problem" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Fragmentation of Modern Life</h2>
+            <p>You have a career, relationships, health goals, and personal aspirations. From the outside, the pieces are all there. Yet, internally, it feels like a constant, draining battle to keep them from flying apart. We run on different, often conflicting, internal programs for each area of our life.</p>
+            <p>Our 'work self' might be disciplined and ambitious, while our 'home self' is exhausted and passive. Our 'health self' sets goals our 'emotional self' sabotages. This creates immense internal friction—a constant hum of stress, cognitive dissonance, and wasted energy. We believe this fragmentation is the root cause of the burnout and lack of fulfillment so common today. It's not about lacking willpower; it's about lacking a unified internal architecture.</p>
+        </div>
+    </div>
+    <div id="modal-premise-solution" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Path to Coherence</h2>
+            <p>Coherence is the state where your internal world and external actions are in perfect resonance. It is a life lived with profound integrity, energy, and flow. It's when your thoughts, emotions, physical energy, and deepest values are all aligned and moving in the same direction.</p>
+            <p>LiveIndus provides the map and the tools to build this internal alignment. It is not about adding more tasks or life hacks. It is an upgrade to your internal operating system. By understanding the core components of your experience—The Axis and The Arena—and practicing the Disciplines that integrate them, you move from a life of fragmentation to one of powerful, unified Coherence. You stop managing pieces and start living as an integrated whole.</p>
+        </div>
+    </div>
+
+    <div id="modal-method-axis" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Axis: Your Unshakable Center</h2>
+            <p>The Axis is the most profound and powerful aspect of you, yet it is also the most subtle. It is the silent, stable core of pure awareness. It is not your thoughts, emotions, or body—it is the part of you that is aware *of* your thoughts, emotions, and body. Think of it as the sky, which remains vast and unchanged whether there are storm clouds, sunshine, or a clear night. The weather is your experience; the sky is your Axis.</p>
+            <p>In a world of constant change and stimulation, our attention is almost always directed outward, lost in the "weather" of our lives. The first and most crucial step in the LiveIndus method is learning to identify and connect with this inner stability. A strong connection to your Axis provides resilience, clarity, and an internal anchor that keeps you steady no matter how turbulent the Arena becomes. It is the source of true confidence and inner peace.</p>
+        </div>
+    </div>
+    <div id="modal-method-arena" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAllModals()">×</button>
+            <h2>The Arena & Its Currents</h2>
+            <p>The Arena is the dynamic, ever-changing world of your lived reality. It's everything that happens, everything you can perceive. The key is not to control the Arena, but to navigate it with skill and wisdom. To do this, we must first understand its structure. The Arena is composed of four interconnected layers of experience we call <strong>The Currents:</strong></p>
+            <ul>
+                <li><strong>The Somatic Current:</strong> The language of the physical body. It includes all physical sensations, posture, tension, relaxation, pain, and pleasure. It is the most tangible layer of your experience.</li>
+                <li><strong>The Kinetic Current:</strong> The flow of vital energy. This is your life force, experienced as breath, stamina, fatigue, and vibrancy. It animates the Somatic Current.</li>
+                <li><strong>The Emotional Current:</strong> The texture of feelings. This includes the entire spectrum of human emotion—joy, anger, peace, anxiety—and their complex interplay. This current powerfully influences all others.</li>
+                <li><strong>The Cognitive Current:</strong> The stream of the mind. This involves thoughts, beliefs, memories, stories, and the mental models you use to interpret reality. It is the narrative layer of your experience.</li>
+            </ul>
+             <p>These currents are constantly interacting and influencing one another. A thought (Cognitive) can trigger an emotion (Emotional), which creates a physical sensation (Somatic) and changes your breathing (Kinetic). The LiveIndus method teaches you to observe these currents from the stability of your Axis, understanding their interplay without being swept away by them.</p>
+        </div>
+    </div>
+
+    <div id="modal-discipline-resonance" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Resonance</h2><p>This is the practice of ethical alignment. It involves consciously choosing actions in your Arena (your work, relationships, habits) that resonate with the quiet truth of your Axis. This eliminates internal friction and cultivates a life of deep integrity and authenticity.</p></div></div>
+    <div id="modal-discipline-embodiment" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Embodiment</h2><p>This is the practice of grounding your Axis in your body. Through specific techniques involving structural movement and conscious breath regulation, you learn to listen to and harmonize the Somatic and Kinetic Currents. This builds a stable, responsive, and intelligent physical foundation.</p></div></div>
+    <div id="modal-discipline-focus" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Focus</h2><p>This is the practice of mastering your attention. You learn to place your awareness consciously within the Emotional and Cognitive Currents without being swept away by them. This discipline transforms distraction into direction and builds immense mental clarity and presence.</p></div></div>
+    <div id="modal-discipline-synthesis" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>Discipline of Synthesis</h2><p>This is the ultimate practice of integration. Here, you learn to hold your Axis steady while embracing the full, dynamic flow of the Arena. This is where you access states of profound well-being and flow, where the distinction between observer and experience begins to dissolve into a coherent whole.</p></div></div>
+    <div id="modal-tide-lucid" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Lucid Tide</h2><p>This is a state of calm, clear, and harmonious energy. It is receptive, bright, and balanced. The Lucid Tide is the ideal state for learning, creative ideation, strategic thinking, deep connection with others, and any activity requiring insight and subtle perception. Cultivating this state allows you to see things as they are, without the distortion of agitation or lethargy.</p></div></div>
+    <div id="modal-tide-dynamic" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Dynamic Tide</h2><p>This is a state of active, energetic, and forward-moving energy. It is passionate, ambitious, and driven. The Dynamic Tide is the engine of accomplishment, perfect for executing tasks, overcoming challenges, physical exertion, and driving change in the world. Learning to harness this tide without letting it become chaotic or stressful is the key to effective action without burnout.</p></div></div>
+    <div id="modal-tide-grounded" class="modal-overlay" onclick="closeAllModals(event)"><div class="modal-content"><button class="modal-close" onclick="closeAllModals()">×</button><h2>The Grounded Tide</h2><p>This is a state of still, heavy, and stable energy. It is about rest, consolidation, and structure. While often mistaken for laziness, the Grounded Tide is essential for recovery, integrating lessons, and building stable foundations for future growth. Deep rest, reflection, and planning are best done when this tide is present. Honoring it is the secret to long-term sustainability and resilience.</p></div></div>
+
+
+    <script>
+        // --- TAB SCRIPT ---
+        function openTab(evt, tabName) {
+            let i, tabcontent, tabbuttons;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // --- MODAL SCRIPT ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeAllModals(event) {
+            // If the click is on the overlay itself (not the content), close it.
+            if (event && event.target.classList.contains('modal-overlay')) {
+                 event.target.classList.remove('active');
+            } else if (!event) { // For close buttons that pass no event
+                let modals = document.getElementsByClassName('modal-overlay');
+                for (let i = 0; i < modals.length; i++) {
+                    modals[i].classList.remove('active');
+                }
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeAllModals();
+            }
+        });
+    </script>
+
+</body>
+</html>

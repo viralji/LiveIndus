@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveIndus - The Architecture of a Coherent Life</title>
+    <style>
+        /* FONTS - Keeping 'Cinzel' for headings for the classic, inscribed feel. */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;600&display=swap');
+
+        :root {
+            /* NEW PALETTE - Cream dominant, Rust for earthiness, Gold for sacred accents. */
+            --cream-bg: #FDF9F3;     /* Dominant warm cream for background, like aged paper */
+            --rust: #A83A0D;         /* Deeper, richer rust for emphasis and warmth */
+            --golden-accent: #C79533; /* Muted, antique gold for delicate highlights and borders */
+            --dark-sepia-text: #5A4E40; /* Darker, grounded text color for readability */
+            --light-border: #E8E0D2; /* Soft border color that blends with cream */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cream-bg);
+            /* Subtle parchment-like texture for depth */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39tbW1dXV1ra2uEhIRzc3N6enp0dHRsbGx8fHyAZK9IAAAAJUlEQVRIx+3WyQkAMQxEUTIoajvM9v/fWUoSgT2ZEvKE0g/A1dKAlBJjY+P6xSSt3f3A7A8w+QO8g2g2AkvgoB2YxMHiRhK6rK2d3C14y4eTlvxL41U26i0HJuLcw7eYxDkIeHJDfB/BvB3D7A9fpxgkvHk30d3U6A9g2g3gSgKAZokjAQB2A10AAAAASUVORK5CYII=');
+            color: var(--dark-sepia-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px; /* Adjust size as needed */
+            height: 80px;
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--rust);
+            border: 2px solid var(--golden-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8em;
+            color: var(--cream-bg);
+            font-weight: 600;
+            line-height: 1; /* Adjust line height for better vertical alignment if text is multi-line */
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Inner symbol for the logo */
+        .logo::before {
+            content: '𓊝'; /* Example symbol: a boat or a stylized Indus Valley script character placeholder */
+            font-size: 1.2em; /* Adjust size of the symbol */
+            color: var(--golden-accent);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.8em;
+            color: var(--rust);
+            margin: 0;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15); /* Slightly stronger shadow */
+            letter-spacing: 3px;
+            padding-top: 20px; /* Give space for potential large logo */
+        }
+
+        header p {
+            font-size: 1.3em;
+            color: var(--dark-sepia-text);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid var(--light-border);
+            margin-bottom: 40px;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: 'Cinzel', serif;
+            font-size: 1.25em;
+            font-weight: 400;
+            color: var(--dark-sepia-text);
+            position: relative;
+            transition: color 0.3s;
+            letter-spacing: 1.5px;
+        }
+
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%;
+            height: 2px;
+            background-color: var(--golden-accent);
+            transition: width 0.4s ease-out;
+        }
+
+        .tab-button.active {
+            font-weight: 600;
+            color: var(--rust);
+        }
+
+        .tab-button.active::after {
+            width: 70%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.8s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--rust);
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed var(--light-border); /* Subtle separator */
+            padding-bottom: 15px;
+        }
+        
+        h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--dark-sepia-text);
+            font-weight: 600;
+            border-bottom: 1px solid var(--golden-accent); /* A golden underline for emphasis */
+            padding-bottom: 8px;
+            margin-top: 45px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.15em;
+            margin-bottom: 20px;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: var(--rust); /* Strong text in rust for emphasis */
+        }
+
+        .highlight-box {
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white on texture */
+            border: 1px solid var(--golden-accent); /* Golden border for importance */
+            border-left: 5px solid var(--rust); /* Rust accent on the side */
+            padding: 30px;
+            margin: 40px auto;
+            border-radius: 3px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Soft shadow for depth */
+        }
+        
+        .highlight-box p {
+            margin: 0;
+            font-size: 1.25em;
+            font-style: italic;
+            text-align: center;
+            color: var(--dark-sepia-text);
+            line-height: 1.6;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .grid-item {
+            background-color: rgba(255, 255, 255, 0.4); /* Subtle transparent background */
+            padding: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--light-border);
+            border-top: 4px solid var(--golden-accent); /* Golden top edge, like a revered tablet */
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .grid-item:hover {
+            background-color: rgba(255,255,255,0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .grid-item h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6em;
+            color: var(--rust);
+            margin-top: 0;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .visual-placeholder {
+            width: 100%;
+            height: 250px; /* Adjust height as needed */
+            background-color: #E0D7C9; /* Placeholder for imagery */
+            border: 1px solid var(--light-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-sepia-text);
+            font-style: italic;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            border-radius: 4px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            opacity: 0.8; /* Slightly muted to blend */
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--rust);
+            color: var(--cream-bg);
+            padding: 18px 45px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1.5px;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--rust);
+            margin-top: 30px;
+        }
+        
+        .btn:hover {
+            background-color: #92320A; /* Slightly darker rust on hover */
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(168, 58, 13, 0.3);
+        }
+        
+        .center-text {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--light-border);
+            font-size: 0.95em;
+            color: var(--dark-sepia-text);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">
+                    </div>
+            </div>
+            <h1>LiveIndus</h1>
+            <p>The Architecture of a Coherent Life</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'Premise')">The Premise</button>
+            <button class="tab-button" onclick="openTab(event, 'Method')">The Method</button>
+            <button class="tab-button" onclick="openTab(event, 'Disciplines')">The Disciplines</button>
+            <button class="tab-button" onclick="openTab(event, 'Tides')">The Tides</button>
+            <button class="tab-button" onclick="openTab(event, 'Journey')">The Journey</button>
+        </div>
+
+        <div id="Premise" class="tab-content active">
+            <h2>Are You Living a Divided Life?</h2>
+            <div class="visual-placeholder">
+                <em>[Ancient scroll or carved tablet depicting fragmented pieces coming together - Visual Placeholder]</em>
+            </div>
+            <p>You have a career. You have relationships. You have goals. You manage your health. From the outside, the pieces are all there. Yet, internally, does it feel like a constant battle to keep them from flying apart? This is the great exhaustion of modern life: a feeling of being fragmented, pulled between who you are and what you do.</p>
+            <p>We believe this fragmentation isn't a personal failure. It's the result of operating with an outdated internal model. We've been taught to manage the parts of our life in isolation—work, health, mind, spirit—without understanding how they dynamically interact. The result is a life of perpetual juggling, not integrated living.</p>
+            
+            <div class="highlight-box">
+                <p><strong>Coherence</strong> is the state where your internal world and external actions are in perfect resonance. It is a life lived with profound integrity, energy, and flow.</p>
+            </div>
+            
+            <p>LiveIndus offers a new map. Not another set of rules or life hacks, but a revolutionary framework for understanding the fundamental dynamics of your own being. It is a method to move from a life of fragmentation to one of powerful, integrated <strong>Coherence</strong>. It's time to stop managing the pieces and start living as a whole.</p>
+        </div>
+
+        <div id="Method" class="tab-content">
+            <h2>The Axis & The Arena: Your Internal Architecture</h2>
+            <div class="visual-placeholder">
+                <em>[Diagram: Central glowing core (Axis) surrounded by swirling layers (Arena) - Visual Placeholder]</em>
+            </div>
+            <p>The Indus Method is built on a simple yet profound understanding of your experience. At any given moment, your life consists of two distinct but interconnected elements: your <strong>Axis</strong> and your <strong>Arena</strong>.</p>
+            
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h3>The Axis: Your Center of Awareness</h3>
+                    <p>The Axis is the silent, stable core of you. It is the unwavering observer—the part of you that witnesses your thoughts, feelings, and sensations without being defined by them. It is your center of gravity, your source of innate calm and clarity. It doesn't change with your moods or circumstances. <strong>It simply *is*.</strong> Strengthening your connection to your Axis is the foundation of resilience.</p>
+                </div>
+                <div class="grid-item">
+                    <h3>The Arena: Your Field of Experience</h3>
+                    <p>The Arena is the dynamic, ever-changing world of your lived reality. It's everything that happens: your physical body, your energy levels, your emotions, your thoughts, and your external environment. The Arena is always in motion, a rich and complex field of information and sensation. The key is not to control the Arena, but to navigate it with skill and wisdom.</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 50px;">The Currents of The Arena</h3>
+            <div class="visual-placeholder">
+                <em>[Stylized flow chart or ancient-looking glyphs representing the five currents - Visual Placeholder]</em>
+            </div>
+            <p>Your Arena is not a chaotic mess. It has structure, composed of interconnected layers of experience we call <strong>Currents</strong>. Understanding these allows you to pinpoint precisely where imbalance occurs.</p>
+            <ul>
+                <li><strong>The Somatic Current:</strong> The language of the physical body. Sensation, posture, tension, and ease.</li>
+                <li><strong>The Kinetic Current:</strong> The flow of vital energy. Breath, stamina, fatigue, and vibrancy.</li>
+                <li><strong>The Emotional Current:</strong> The texture of feelings. Joy, anger, peace, anxiety, and their complex interplay.</li>
+                <li><strong>The Cognitive Current:</strong> The stream of the mind. Thoughts, beliefs, stories, and mental models.</li>
+                <li><strong>The Essence Current:</strong> The deepest experience. Moments of flow, profound connection, intuition, and innate purpose.</li>
+            </ul>
+        </div>
+
+        <div id="Disciplines" class="tab-content">
+            <h2>The Four Coherence Disciplines</h2>
+            <div class="visual-placeholder">
+                <em>[Four distinct, ancient-looking symbols, one for each discipline - Visual Placeholder]</em>
+            </div>
+            <p>Mastering the relationship between your Axis and Arena isn't an intellectual exercise; it's a practice. We provide four core disciplines designed to build the skill of integrated living.</p>
+            
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h3>1. Resonance</h3>
+                    <p>The practice of ethical alignment. It involves consciously choosing actions in your Arena (your work, relationships, habits) that resonate with the quiet truth of your Axis. This eliminates internal friction and cultivates a life of deep integrity and authenticity.</p>
+                </div>
+                <div class="grid-item">
+                    <h3>2. Embodiment</h3>
+                    <p>The practice of grounding your Axis in your body. Through specific techniques involving structural movement and conscious breath regulation, you learn to listen to and harmonize the Somatic and Kinetic Currents. This builds a stable, responsive, and intelligent physical foundation.</p>
+                </div>
+                <div class="grid-item">
+                    <h3>3. Focus</h3>
+                    <p>The practice of mastering your attention. You learn to place your awareness consciously within the Emotional and Cognitive Currents without being swept away by them. This discipline transforms distraction into direction and builds immense mental clarity and presence.</p>
+                </div>
+                <div class="grid-item">
+                    <h3>4. Synthesis</h3>
+                    <p>The ultimate practice of integration. Here, you learn to hold your Axis steady while embracing the full, dynamic flow of the Arena. This is where you access the Essence Current, leading to peak states of performance, creativity, and profound well-being we call Coherence.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="Tides" class="tab-content">
+            <h2>Navigating The Tides of Experience</h2>
+            <div class="visual-placeholder">
+                <em>[Ancient map or celestial chart showing three distinct currents or paths - Visual Placeholder]</em>
+            </div>
+            <p>The Currents in your Arena are influenced by three universal energetic signatures we call <strong>Tides</strong>. Life isn't about forcing one state, but about skillfully using the nature of each Tide. A master navigator uses the tides; they don't fight them.</p>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>The Lucid Tide</h4>
+                    <p><strong>Qualities:</strong> Clarity, balance, lightness, reflection, insight.<br>
+                    <strong>Best for:</strong> Learning, strategic thinking, deep connection, creative ideation, and restorative activities.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>The Dynamic Tide</h4>
+                    <p><strong>Qualities:</strong> Action, energy, passion, momentum, ambition.<br>
+                    <strong>Best for:</strong> Executing tasks, overcoming challenges, physical exertion, achieving goals, and driving change.</p>
+                </div>
+                 <div class="grid-item">
+                    <h4>The Grounded Tide</h4>
+                    <p><strong>Qualities:</strong> Stillness, stability, rest, consolidation, structure.<br>
+                    <strong>Best for:</strong> Deep rest, recovery, integrating lessons, planning foundations, and finding stability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="Journey" class="tab-content">
+            <h2>From Theory to Transformation</h2>
+            <div class="visual-placeholder">
+                <em>[Ancient pathway leading to a glowing central structure or monument - Visual Placeholder]</em>
+            </div>
+            <p>Understanding the framework is the first step. Embodying it is the journey. Coherence is not a destination you arrive at, but a state you learn to cultivate daily through conscious practice. It is the most rewarding skill you will ever develop.</p>
+            
+            <div class="highlight-box" style="border-left-color: var(--rust); text-align:center;">
+                 <h3>The Coherence Code: A 30-Day Immersion</h3>
+                 <p style="font-style: normal; text-align:left; max-width: 650px; margin: 20px auto; color: var(--dark-sepia-text);">
+                    Our foundational program provides the tools and practices to help you establish a strong connection to your <strong>Axis</strong>, navigate the <strong>Currents</strong> of your daily life, and master the <strong>Disciplines</strong> of Coherence. Learn to identify and work with the inherent <strong>Tides</strong> of your experience to live with profound intention and effortless flow.
+                 </p>
+                 <a href="#learn-more" class="btn">Enroll in the Immersion</a>
+            </div>
+            
+            <p class="center-text">For a deeper dive into the LiveIndus philosophy, sign up for our weekly newsletter, "The Current," offering insights and practices for integrated living.</p>
+            
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 LiveIndus. All Rights Reserved. | Live with Coherence.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+</body>
+</html>

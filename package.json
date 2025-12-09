@@ -1,0 +1,28 @@
+{
+  "name": "liveindus-website",
+  "version": "1.0.0",
+  "description": "LiveIndus - The Illuminated Artifact - A website for spiritual guidance and coherence",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.2.1",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.9.1"
+  },
+  "keywords": [
+    "spirituality",
+    "coherence",
+    "meditation",
+    "mindfulness",
+    "personal-development"
+  ],
+  "author": "LiveIndus",
+  "license": "MIT"
+}
